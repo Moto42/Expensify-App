@@ -7,5 +7,6 @@
     "mounts": [
         // anonymous volume so node_modules stuff doesn't get installed directly on the host
         {"target": "${containerWorkspaceFolder}/node_modules", "type": "volume"}
-    ]
+    ],
+    "onCreateCommand": "npm install && npm run setup-https"
 }
