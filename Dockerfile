@@ -14,3 +14,9 @@ RUN brew install mkcert;
 # install nvm
 RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash;
 
+FROM base_dependencies AS node_installed
+# I don't want all of the above being re-done if/when node version is updated.
+# so isolating this operation to it's own stage
+COPY .nvmrc /expensify/.nvmrc
+WORKDIR /expensify
+RUN bash -i -c 'nvm install';
