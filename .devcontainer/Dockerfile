@@ -6,7 +6,7 @@ FROM ubuntu:24.04 AS base_dependencies
 # Stage for the basic dependencies that will rarely change
 SHELL ["/bin/bash", "-c"]
 # need curl for some installs, nvm req git, brew req build-essential.
-RUN apt update && apt install -yq curl git build-essential;
+RUN apt update && apt install -yq curl git build-essential libnss3-tools;
 # install brew
 RUN NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" && \
     (echo; echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"') >> /root/.bashrc 
