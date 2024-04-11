@@ -1,6 +1,11 @@
+# Note: NVM must be called via `bash -i -c 'nvm ...'`.
+# Without the -i flag, it is running 'noninteractivly' and ignores the commands 
+# in ~/.profile that load NVM and ready it for use.
+
 FROM ubuntu:24.04 AS base_dependencies
 # Stage for the basic dependencies that will rarely change
 SHELL ["/bin/bash", "-c"]
+# need curl for some installs, nvm req git, brew req build-essential.
 RUN apt update && apt install -yq curl git build-essential;
 # install brew
 RUN NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" && \
@@ -15,8 +20,10 @@ RUN brew install mkcert;
 RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash;
 
 FROM base_dependencies AS node_installed
-# I don't want all of the above being re-done if/when node version is updated.
-# so isolating this operation to it's own stage
-COPY .nvmrc /expensify/.nvmrc
-WORKDIR /expensify
-RUN bash -i -c 'nvm install';
+# Isoalte nvm install to its own stage. Node version will probably change more
+# often than the items in base_dependencies.
+# Only file this stage requires.
+COPY .nvmrc /tempexpensify/.nvmrc
+WORKDIR /tempexpensify
+# install && cleanup
+RUN bash -i -c 'nvm install' && rm -rf tempexpensify;
