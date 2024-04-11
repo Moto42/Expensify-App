@@ -28,7 +28,7 @@ WORKDIR /tempexpensify
 # install && cleanup
 RUN bash -i -c 'nvm install' && rm -rf tempexpensify;
 
-# From here we need to npm install and npm run mkcert.
+# From here we need to npm install and npm run setup-https.
 # As the node_modules folder dosent' belong in the image,
 # this will be done when the container is created.
 # see devcontainer.json > onCreateCommand for more.
